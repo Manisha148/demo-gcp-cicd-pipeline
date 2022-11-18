@@ -12,10 +12,10 @@ steps:
 # images:
 # - gcr.io/$PROJECT_ID/myapp
 # deploy container image to GKE
-- name: "gcr.io/cloud-builders/docker:latest"
+- name: 'gcr.io/cloud-builders/docker'
   args:
   - run
   - --filename=K8s/
-  - --image=gcr.io/$PROJECT_ID/myapp:v1
-  - --location=us-west1-b
+  - --image=gcr.io/$PROJECT_ID/myapp
+  - --location=us-centeal1-b
   - --cluster=mykube
