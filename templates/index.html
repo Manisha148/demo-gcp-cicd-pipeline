@@ -1,76 +1,316 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Static Template</title>
-    <style>
-      body {
-        margin: 0;
-        background: rgba(0, 0, 0, 0.9);
-      }
-    </style>
-  </head>
-  <body>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.144.0/three.js"
-      integrity="sha512-sykSwuu4QWy5GL//gwZk/TWFO9IXveDwQB5TtR2LFxXt/WlMngMo2vwN/FV7Jr1cRAvkMnaqbTJvZIsdwLn5FA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
+<!doctype html>
+<html>
+	<head>
+		<style>
+			body {
+    margin: 0;
+    padding: 1em 2em;
+    background: #fafafa;
+}
 
-    <script type="module">
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(
-        25,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        10000
-      );
+* {
+    box-sizing: border-box;
+}
 
-      const renderer = new THREE.WebGLRenderer({ alpha: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
+li {
+    cursor: pointer;
+    padding: 1em 1em;
+    font-family: system-ui;
+}
 
-      // const geometry = new THREE.BoxGeometry(1, 1, 1);
-      // const material = new THREE.MeshNormalMaterial({
-      //   wireframe: true
-      // });
-      // const cube = new THREE.Mesh(geometry, material);
+hr {
+    border-bottom-width: 4px;
+    border-bottom-color: #ff6161;
+    width: 100px;
+    margin-left: 0;
+    margin-top: 1em;
+}
 
-      // scene.add(cube);
+li:hover {
+    text-decoration: line-through;
+    text-decoration-color: #ff6161;
+}
 
-      const x = 0,
-        y = 0;
+button {
+    width: 50%;
+    display: block;
+    cursor: pointer;
+    padding: 1em 3em;
+    border-radius: 50px;
+    border: none;
+    background: #ff6161;
+    color: #fff;
+    width: 150px;
+}
 
-      const heartShape = new THREE.Shape();
+img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
 
-      heartShape.moveTo(x + 5, y + 5);
-      heartShape.bezierCurveTo(x + 5, y + 5, x + 4, y, x, y);
-      heartShape.bezierCurveTo(x - 6, y, x - 6, y + 7, x - 6, y + 7);
-      heartShape.bezierCurveTo(x - 6, y + 11, x - 3, y + 15.4, x + 5, y + 19);
-      heartShape.bezierCurveTo(x + 12, y + 15.4, x + 16, y + 11, x + 16, y + 7);
-      heartShape.bezierCurveTo(x + 16, y + 7, x + 16, y, x + 10, y);
-      heartShape.bezierCurveTo(x + 7, y, x + 5, y + 5, x + 5, y + 5);
+.app {
+    display: grid;
+    grid-template-columns: minmax(200px, 25%) 1fr;
+}
 
-      const geometry = new THREE.ShapeGeometry(heartShape);
-      const material = new THREE.MeshNormalMaterial();
-      const mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
+.container > div {
+    font-weight: bold;
+    font-size: 4rem;
+}
 
-      camera.position.z = 200;
+.sidebar {
+    padding: 2em 1em;
+}
 
-      function animate() {
-        requestAnimationFrame(animate);
+.sidebar {
+    position: sticky;
+    top: 0;
+}
 
-        mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.01;
+.sidebar > div {
+    font-weight: bold;
+    font-size: 3rem;
+    padding-right: 1em;
+}
 
-        renderer.render(scene, camera);
-      }
+.sidebar > div:nth-of-type(2):after {
+    content: " Ipsum";
+}
 
-      animate();
-    </script>
-  </body>
+.sidebar > ul {
+    list-style-type: none;
+    padding: 1em 0em;
+}
+
+.container,
+.header {
+    padding-top: 6rem;
+}
+
+.header {
+    padding: 7rem 2em 2em 2em;
+}
+
+.wrapper {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.wrapper > div:nth-of-type(1) {
+    width: 60%;
+}
+
+.wrapper > div:nth-of-type(2) {
+    width: 40%;
+    font-family: system-ui;
+}
+
+.card-section {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    width: 100%;
+    height: max-content;
+}
+
+.card {
+    background: #fff;
+    margin: 1em;
+    padding: 1em;
+    border-radius: 2rem;
+    transition: all 0.2s ease-in;
+    cursor: pointer;
+    box-shadow: 0px 0px 20px 1px #cdcdcdb3;
+}
+
+.card:hover {
+    box-shadow: 0px 0px 4px 0px #cdcdcdb3;
+}
+
+.card-image {
+    text-align: center;
+    padding: 1em;
+}
+
+.card-body {
+    text-align: center;
+    font-weight: bold;
+    padding: 1em;
+}
+
+.cart-btn {
+    display: none;
+    color: #ff6161;
+}
+
+.sidebar-toggle {
+    display: none;
+    color: #ff6161;
+}
+
+@media screen and (max-width: 550px) {
+    body {
+        padding: 0em 2em 2em 2em;
+    }
+
+    img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .app {
+        display: block;
+    }
+
+    .container {
+        padding-top: 2rem;
+    }
+
+    .wrapper > div:nth-of-type(1) {
+        width: 100%;
+    }
+    .wrapper > div:nth-of-type(2) {
+        width: 100%;
+        order: 1;
+    }
+
+    .wrapper > div:nth-of-type(3) {
+        width: 100%;
+        flex-flow: row wrap;
+        overflow: initial;
+    }
+
+    .card {
+        padding: 0.5em;
+        margin: 0.4em;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .container > div {
+        font-size: 3rem;
+        margin-bottom: 1em;
+    }
+
+    .header {
+        padding: 2em 0em 0em 0em;
+    }
+
+    .sidebar {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: center;
+        position: static;
+        top: 0;
+        padding: 2em 0em;
+    }
+
+    .sidebar > ul {
+        display: none;
+    }
+
+    .sidebar > div {
+        font-weight: bold;
+        font-size: 2rem;
+        padding-right: auto;
+        text-align: center;
+    }
+
+    .sidebar > div:nth-of-type(2):after {
+        content: "";
+    }
+
+    .card-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-content: space-between;
+    }
+
+    .cart-btn,
+    .sidebar-toggle {
+        display: block;
+    }
+
+    .cart {
+        display: none;
+    }
+}
+
+		</style>
+	</head>
+	<body>
+		<div class="app">
+    <div class="sidebar">
+        <div class="sidebar-toggle">
+            <i class="im im-menu"></i>
+        </div>
+        <div>Lorem</div>
+        <ul>
+            <li>About</li>
+            <li>Service</li>
+            <li>Cusine</li>
+            <li>Gallery</li>
+            <li>Contact</li>
+            <li>Book</li>
+        </ul>
+        <div class="cart">
+            <button type="button">Cart</button>
+        </div>
+        <div class="cart-btn">
+            <i class="im im-shopping-cart"></i>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div class="container">
+            <div>What are you having from Lunch ?</div>
+        </div>
+        <div class="header">
+            <div>
+                Lorem ipsum dolor sit amet consecuter elit, sed do elisumod tempor
+                incidunt ut labore et
+            </div>
+            <hr />
+        </div>
+        <div class="card-section">
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://images.pexels.com/photos/1260968/pexels-photo-1260968.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=120&w=120" alt="" />
+                </div>
+                <div class="card-body">Mexican Taco</div>
+            </div>
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://images.pexels.com/photos/1260968/pexels-photo-1260968.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=120&w=120" alt="" />
+                </div>
+                <div class="card-body">Mexican Taco</div>
+            </div>
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://images.pexels.com/photos/1260968/pexels-photo-1260968.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=120&w=120" alt="" />
+                </div>
+                <div class="card-body">Mexican Taco</div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://images.pexels.com/photos/1260968/pexels-photo-1260968.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=120&w=120" alt="" />
+                </div>
+                <div class="card-body">Mexican Taco</div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://images.pexels.com/photos/1260968/pexels-photo-1260968.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=120&w=120" alt="" />
+                </div>
+                <div class="card-body">Mexican Taco</div>
+            </div>
+        </div>
+    </div>
+</div>
+	</body>
 </html>
