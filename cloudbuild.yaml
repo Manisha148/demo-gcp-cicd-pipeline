@@ -7,18 +7,18 @@ steps:
   args: ['push', 'gcr.io/$PROJECT_ID/myapp']
 # # Deploy container image to Cloud Run
 - name: 'gcr.io/cloud-builders/docker'
-#   entrypoint: gcloud
-#   args: ['run', 'deploy', 'myapp', '--image', 'gcr.io/$PROJECT_ID/myapp', '--region', 'us-central1', '--platform', 'managed','--port','80']
-# images:
-# - gcr.io/$PROJECT_ID/myapp
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'myapp', '--image', 'gcr.io/$PROJECT_ID/myapp', '--region', 'us-central1', '--platform', 'managed','--port','80']
+images:
+- gcr.io/$PROJECT_ID/myapp
 # deploy container image to GKE
 # - name: 'gcr.io/cloud-builders/docker'
-  args:
-  - run
-  - --filename=K8s/
-  - --image=gcr.io/$PROJECT_ID/myapp
-  - --location=us-centeal1-b
-  - --cluster=mykube
+#   args:
+#   - run
+#   - --filename=K8s/
+#   - --image=gcr.io/$PROJECT_ID/myapp
+#   - --location=us-centeal1-b
+#   - --cluster=mykube
 
 
 
