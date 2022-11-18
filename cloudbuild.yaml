@@ -12,7 +12,7 @@ steps:
 # images:
 # - gcr.io/$PROJECT_ID/myapp
 # deploy container image to GKE
-- name: "gcr.io/cloud-builders/docker:v1"
+- name: "gcr.io/cloud-builders/docker:latest"
   args:
   - run
   - --filename=K8s/
