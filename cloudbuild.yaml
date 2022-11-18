@@ -1,21 +1,62 @@
-steps:
-# Build the container image
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/myapp', '.']
-# Push the container image to Container Registry
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/myapp']
-# # Deploy container image to Cloud Run
-# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-#   entrypoint: gcloud
-#   args: ['run', 'deploy', 'myapp', '--image', 'gcr.io/$PROJECT_ID/myapp', '--region', 'us-central1', '--platform', 'managed','--port','80']
-# images:
-# - gcr.io/$PROJECT_ID/myapp
-# deploy container image to GKE
-- name: 'gcr.io/cloud-builders/docker'
-  args:
-  - run
-  - --filename=K8s/
-  - --image=gcr.io/$PROJECT_ID/myapp
-  - --location=us-centeal1-b
-  - --cluster=mykube
+# steps:
+# # Build the container image
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['build', '-t', 'gcr.io/$PROJECT_ID/myapp', '.']
+# # Push the container image to Container Registry
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['push', 'gcr.io/$PROJECT_ID/myapp']
+# # # Deploy container image to Cloud Run
+# # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+# #   entrypoint: gcloud
+# #   args: ['run', 'deploy', 'myapp', '--image', 'gcr.io/$PROJECT_ID/myapp', '--region', 'us-central1', '--platform', 'managed','--port','80']
+# # images:
+# # - gcr.io/$PROJECT_ID/myapp
+# # deploy container image to GKE
+# - name: 'gcr.io/cloud-builders/docker'
+#   args:
+#   - run
+#   - --filename=K8s/
+#   - --image=gcr.io/$PROJECT_ID/myapp
+#   - --location=us-centeal1-b
+#   - --cluster=mykube
+
+
+
+
+stages:
+
+ - build-push
+ - deploy
+
+image: docker:19.03.12
+variables:
+ DOCKER_HOST: tcp://docker:2375/
+ DOCKER_TLS_CERTDIR: ""
+ REGISTRY_HOSTNAME: gcr.io/GCP_PROJECT_NAME
+ DOCKER_IMAGE_NAME: ${CI_PROJECT_NAME}
+services:
+ - docker:19.03.12-dind
+
+build-push:
+ stage: build-push
+ before_script:
+   - docker info
+   - echo "$SERVICE_ACCOUNT_KEY" > key.json
+   - docker login -u _json_key --password-stdin https://gcr.io < key.json
+ script:
+   - docker build --tag $REGISTRY_HOSTNAME/$DOCKER_IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
+   - docker push $REGISTRY_HOSTNAME/$DOCKER_IMAGE_NAME:$CI_COMMIT_SHORT_SHA
+
+deploy:
+ stage: deploy
+ image: google/cloud-sdk
+ script:
+# Authenticate with GKE
+   - echo "$SERVICE_ACCOUNT_KEY" > key.json
+   - gcloud auth activate-service-account --key-file=key.json
+   - gcloud config set project GCP_PROJECT_NAME
+   - gcloud config set container/cluster GKE_CLUSTER_NAME
+   - gcloud config set compute/zone asia-south1-c
+   - gcloud container clusters get-credentials GKE_CLUSTER_NAME --zone asia-south1-c --project GCP_PROJECT_NAME
+   - sed -i "s/<VERSION>/${CI_COMMIT_SHORT_SHA}/g" deployment.yaml
+   - kubectl apply -f deployment.yaml
